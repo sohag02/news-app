@@ -10,12 +10,14 @@ export const Article = ({
   image,
   url,
   pub,
+  source
 }: {
   title: string;
   description: string;
   image: string;
   url: string;
   pub: string;
+  source: string;
 }) => {
   return (
     <Link href={url}>
@@ -26,7 +28,7 @@ export const Article = ({
             <CardDescription>{description}</CardDescription>
           </CardHeader>
           <CardFooter>
-            {timeAgo(pub)}
+            <span className="text-gray-500">{timeAgo(pub)} from {source}</span>
           </CardFooter>
         </div>
         <Image
