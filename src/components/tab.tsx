@@ -8,7 +8,7 @@ export const Tab = ({name, path}: {name: string, path: string}) => {
 	const pathname = usePathname();
   return (
     <Link href={path}>
-      <Button variant={pathname === path ? "active" : "inactive"}>{name}</Button>
+      <Button variant={pathname === path ? "active" : "ghost"}>{name}</Button>
     </Link>
   );
 };
