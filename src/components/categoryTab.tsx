@@ -3,16 +3,16 @@ import { Tab } from "@/components/tab";
 
 export default function CategoryTab() {
 
-  const categroryList = ["business", "entertainment", "technology", "science", "sports", "politics", "health", "education", "travel", "food", "games", "other"];
+  const categoryList = ["business", "entertainment", "technology", "science", "sports", "politics", "health", "education", "travel", "food", "games", "other"];
 
   return (
-    <nav className="flex flex-row gap-4 px-4 py-8 text-white">
-      <Tab name="Home" path="/" />
-      {
-        categroryList.map((category, index) => {
-          return <Tab name={category.charAt(0).toUpperCase() + category.slice(1)} path={`/category/${category}`} key={index} />;
-        })
-      }
+    <nav className="bg-gray-800 text-white p-4 rounded-lg overflow-x-auto">
+      <ul className="flex gap-4">
+        <li><Tab name="Home" path="/" /></li>
+        {categoryList.map((category, index) => (
+          <li key={index}><Tab name={category.charAt(0).toUpperCase() + category.slice(1)} path={`/category/${category}`} /></li>
+        ))}
+      </ul>
     </nav>
   );
 }
