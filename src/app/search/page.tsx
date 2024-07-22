@@ -2,7 +2,6 @@
 import React, { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { Article } from "@/components/article";
-import { SearchBar } from "@/components/searchBar";
 
 export default function SearchPage() {
   const params = useSearchParams();
@@ -39,7 +38,6 @@ export default function SearchPage() {
 
   return (
     <div className="container mx-auto px-4">
-			<SearchBar />
       <div className="mt-4 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1">
         {articles.map((article, index) => (
           <Article
