@@ -2,8 +2,8 @@
 import React from "react";
 import { SearchBar } from "./searchBar";
 import { Newspaper } from "lucide-react";
-import { ToggleLeft } from "lucide-react";
 import Link from "next/link";
+import { ThemeToggle } from "./themeToggle";
 
 export const Navbar = () => {
   return (
@@ -15,7 +15,7 @@ export const Navbar = () => {
         </div>
       </Link>
       <SearchBar />
-      <ToggleLeft />
+      <ThemeToggle />
     </div>
   );
 };
