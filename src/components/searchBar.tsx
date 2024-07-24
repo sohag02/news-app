@@ -1,30 +1,54 @@
 "use client";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export function SearchBar() {
+  const [isInputVisible, setIsInputVisible] = useState(false);
+
+  const handleButtonClick = () => {
+    setIsInputVisible(!isInputVisible); // Toggle input visibility
+  };
   const router = useRouter();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const inputElement = e.currentTarget.querySelector("input");
+    const inputElement = document.getElementById("search-input");
     if (!inputElement) return;
     const searchTerm = inputElement.value;
-		if (!searchTerm) return;
+    if (!searchTerm) {
+      setIsInputVisible(false); // Close input visibility
+      return;
+    }
     router.push(`/search?q=${searchTerm}`);
+    setIsInputVisible(false); // Close input visibility
   };
   return (
     // <div className="my-2 flex w-full max-w-xs flex-col items-center space-y-2 sm:max-w-sm sm:flex-row sm:space-x-2 sm:space-y-0 md:max-w-lg lg:max-w-xl xl:max-w-2xl">
     <form
       onSubmit={handleSubmit}
-      className="my-2 flex w-full max-w-xs flex-col items-center space-y-2 sm:max-w-sm sm:flex-row sm:space-x-2 sm:space-y-0 md:max-w-lg lg:max-w-xl xl:max-w-2xl"
+      className="flex w-full max-w-xs flex-col items-center space-y-2 sm:w-auto sm:flex-row sm:items-center sm:justify-end"
     >
-      <Input type="text" placeholder="Search.." />
-      <Button type="submit">
-        <Search className="mr-2 h-4 w-4" /> Search
-      </Button>
+      {!isInputVisible && (
+        <button onClick={handleButtonClick} className="mt-2 md:block">
+          <Search className="h-[1.2rem] w-[1.2rem]" />{" "}
+          <p className="hidden md:block">Search</p>
+        </button>
+      )}
+      {isInputVisible && (
+        <>
+          <Input
+            id="search-input"
+            type="text"
+            placeholder="Search.."
+            className="absolute inset-0"
+          />
+          <button type="submit" className="ml-2 flex flex-row">
+            <Search className="h-[1.2rem] w-[1.2rem]" />{" "}
+            <p className="hidden md:block">Search</p>
+          </button>
+        </>
+      )}
     </form>
-    // </div>
   );
 }
