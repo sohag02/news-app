@@ -1,12 +1,22 @@
-import axios from 'axios';
+import axios, { type AxiosResponse } from 'axios';
 import cheerio from 'cheerio';
 
-async function fetchFinalHTML(url) {
+interface CustomAxiosResponse extends AxiosResponse {
+  request: {
+    res: {
+      responseUrl: string;
+    };
+  };
+}
+
+async function fetchFinalHTML(url: string): Promise<{ finalURL: string; html: string } | null> {
   try {
     // Make a request and follow redirects
     const response = await axios.get(url, { maxRedirects: 10 });
-    const finalURL = response.request.res.responseUrl;
-    const html = response.data;
+    // Cast the response to our custom type
+    const customResponse = response as CustomAxiosResponse;
+    const finalURL = customResponse.request.res.responseUrl;
+    const html = customResponse.data as string;
     return { finalURL, html };
   } catch (error) {
     console.error('Error fetching the final URL or HTML:', error);
@@ -14,7 +24,7 @@ async function fetchFinalHTML(url) {
   }
 }
 
-async function extractMetaTag(url) {
+async function extractMetaTag(url: string) {
   try {
     // Fetch the final URL and HTML content
     const result = await fetchFinalHTML(url);
@@ -30,7 +40,7 @@ async function extractMetaTag(url) {
 
     // Extract the og:image meta tag content
     const metaTag = $('meta[property="og:image"]');
-    const imageUrl = metaTag.attr('content') || '';
+    const imageUrl = metaTag.attr('content') ?? '';
 
     return imageUrl;
   } catch (error) {

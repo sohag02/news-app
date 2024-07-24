@@ -5,14 +5,18 @@ import { extractMetaTag } from "@/lib/extractImage";
 
 const rssUrl = "https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en";
 
+interface RssItem {
+  link: string;
+}
+
 const getRssFeed = async () => {
     const parser = new Parser();
     const response = await parser.parseURL(rssUrl);
     return response;
   };
 
-const getImageUrl = async (item: unknown) => {
-  const res = await fetch(item.link as string, {redirect: 'follow'});
+const getImageUrl = async (item: RssItem) => {
+  const res = await fetch(item.link, {redirect: 'follow'});
   const html = await res.text();
   const $ = cheerio.load(html);
   const metaTag = $('meta[property="og:image"]');
@@ -22,7 +26,7 @@ const getImageUrl = async (item: unknown) => {
 
 export async function GET () {
     const response = await getRssFeed();
-    const items = response.items;
+    const items = response.items as RssItem[];
     const imageUrls = await Promise.all(items.map(async (item) => {
       const imageUrl = await extractMetaTag(item.link);
       return imageUrl;

@@ -13,7 +13,7 @@ export function SearchBar() {
   const router = useRouter();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const inputElement = document.getElementById("search-input");
+    const inputElement = document.getElementById("search-input") as HTMLInputElement;
     if (!inputElement) return;
     const searchTerm = inputElement.value;
     if (!searchTerm) {
