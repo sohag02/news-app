@@ -2,37 +2,53 @@
 import React, { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { Article } from "@/components/article";
+import { useState } from "react";
+
+interface Article {
+  title: string;
+  description: string;
+  url: string;
+  urlToImage: string;
+  publishedAt: string;
+  source: {
+    name: string;
+  };
+}
+
+interface Data {
+  totalResults: number;
+  articles: Article[];
+}
 
 export default function SearchPage() {
   const params = useSearchParams();
   const searchTerm = params.get("q");
 
-  const [articles, setArticles] = React.useState([]);
+  const [articles, setArticles] = useState<Article[]>([]);
 
   const getArticles = async () => {
     const response = await fetch("/api/search?q=" + searchTerm);
-    const data: unknown = await response.json();
+    const data = await response.json() as Data
     console.log("data", data);
     return data.articles;
   };
 
-  // useEffect(() => {
-  //   getArticles()
-  // 	.then((articles) => {
-  // 		setArticles(articles)
-  // 	})
-  // 	.catch((error) => console.log(error));
-  // }, []);
-
   useEffect(() => {
-    fetch("/api/search?q=" + searchTerm)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("data", data);
-        setArticles(data.articles);
-      })
-      .catch((error) => console.log(error));
+    getArticles().then((data) => {
+      setArticles(data);
+    })
+    .catch((error) => console.log(error));
   }, [searchTerm]);
+
+  // useEffect(() => {
+  //   fetch("/api/search?q=" + searchTerm)
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log("data", data);
+  //       setArticles(data.articles);
+  //     })
+  //     .catch((error) => console.log(error));
+  // }, [searchTerm]);
 
   console.log("articles", articles);
 
