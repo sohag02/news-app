@@ -8,14 +8,12 @@ const rssUrl = "https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en";
 const getRssFeed = async () => {
     const parser = new Parser();
     const response = await parser.parseURL(rssUrl);
-    // console.log("response", response);
     return response;
   };
 
 const getImageUrl = async (item: unknown) => {
-  const res = await fetch(item.link, {redirect: 'follow'});
+  const res = await fetch(item.link as string, {redirect: 'follow'});
   const html = await res.text();
-  // console.log("html", html);
   const $ = cheerio.load(html);
   const metaTag = $('meta[property="og:image"]');
   const imageUrl = metaTag.attr('content') ?? '';
