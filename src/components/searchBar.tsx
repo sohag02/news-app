@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 
 export function SearchBar() {
   const [isInputVisible, setIsInputVisible] = useState(false);
@@ -37,12 +38,14 @@ export function SearchBar() {
       )}
       {isInputVisible && (
         <>
-          <Input
-            id="search-input"
-            type="text"
-            placeholder="Search.."
-            className="absolute inset-0"
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Input
+              id="search-input"
+              type="text"
+              placeholder="Search.."
+              className="absolute inset-0"
+            />
+          </Suspense>
           <button type="submit" className="ml-2 flex flex-row">
             <Search className="h-[1.2rem] w-[1.2rem]" />{" "}
             <p className="hidden md:block">Search</p>
